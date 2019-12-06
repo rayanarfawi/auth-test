@@ -9,6 +9,9 @@ require("dotenv").config();
 
 require("./db/db");
 
+
+
+
 //!Express Rate limit and Express Slow Down
 const speedLimiter = slowDown({
   windowMs: 1 * 60 * 1000, // 1 minutes
@@ -16,16 +19,12 @@ const speedLimiter = slowDown({
   delayMs: 500 // begin adding 500ms of delay per request above 100:
 });
 
+//!Security
+app.disable('x-powered-by');
+
 //!Express Plugins
 app.use(compression());
 app.use(cors());
-app.use(
-  require("express-session")({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
-  })
-);
 app.use(speedLimiter);
 app.use(helemt());
 app.use(bodyParser.json());
@@ -39,7 +38,7 @@ app.all("*", (req, res) => {
 });
 
 // !error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   if (err.code !== "EBADCSRFTOKEN") return res.status(403).send(err.message);
 
   // handle CSRF token errors here

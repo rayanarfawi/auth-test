@@ -41,6 +41,9 @@ build/Release
 node_modules/
 jspm_packages/
 
+#redis
+redis-5.0.7/
+
 # TypeScript v1 declaration files
 typings/
 
